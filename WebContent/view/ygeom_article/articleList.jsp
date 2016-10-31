@@ -10,7 +10,7 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-		<title>Insert title here</title>
+		<title>게시글 등록</title>
 		<link rel="stylesheet" href="../css/common.css">
 		<link rel="stylesheet" href="css/article.css">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
@@ -60,15 +60,8 @@
 				<table class="table table-hover">
 					<thead>
 						<tr>
-							<th>선택</th>
-							<th>번호</th>
-							<th>제목</th>
-							<th>작성자</th>
-							<th>조회수</th>
-						</tr>
-					</thead>
-					<tbody>
-					<%
+						<th>선택</th>
+						<%
 						Class.forName("com.mysql.jdbc.Driver");
 						System.out.println("driver loading success");
 
@@ -86,20 +79,33 @@
 							System.out.println("드라이버 로딩 성공");
 
 							stmt = conn.createStatement();
-							String sql = "select * from articles";
+							String sql = "select num 번호, title 제목, writer 작성자, readCount 조회수 from articles";
 							rs = stmt.executeQuery(sql);
+							ResultSetMetaData rsm = rs.getMetaData();
 
-							while(rs.next()){
+							for(int i = 1; i <= rsm.getColumnCount(); i++) {
+						%>
+							<th class="th_title"><%= rsm.getColumnLabel(i) %></th>
+						<%
+							}
+						%>
+						</tr>
+					</thead>
+					<tbody>
+					
+					<% 
+						while(rs.next()){ 
 					%>
 							<tr>
-								<td><input type="checkbox"></td>
-								<td><%= rs.getInt("num") %></td>
-								<td><%= rs.getString("title") %></td>
-								<td><%= rs.getString("writer") %></td>
-								<td><%= rs.getInt("readCount") %></td>
+								<td class="check_title"><input type="checkbox" class="checked_"></td>
+								<td class="num_title"><%= rs.getInt("번호") %></td>
+								<td class="subject_title"><%= rs.getString("제목") %></td>
+								<td class="writer_title"><%= rs.getString("작성자") %></td>
+								<td class="readcount_title"><%= rs.getInt("조회수") %></td>
 							</tr>
 
-					<% 		}
+					<% } %>
+					<%
 
 						} catch(Exception e) {
 							e.printStackTrace();
@@ -127,12 +133,21 @@
 
 				</script>
 				<label for="all_check">
-					<input type="checkbox" id="all_check" name="all_check"> 전체 선택
+					<input type="checkbox" id="select_all" name="all_check"> 전체 선택
+					
+					<script>
+						function checkAllCheckBox() {
+						   if($('#select_all').is(':checked')){
+						   		$(".check_").attr ( "checked" ,"checked" );
+						    } else {
+						        $(".check_").removeAttr('checked');
+						    }
+						 }
+					</script>
 					<hr>
 					<div class="container text-center">
 
-						<input type="button" id="delete_btn" data-toggle="modal"
-							data-target="#myModal" value="삭제" />
+						<button type="button" id="delete_btn" class="btn btn-default" data-toggle="modal" data-target="#myModal">삭제</button>
 
 						<ul class="pagination pagination-lg pager">
 							<li><a href="#">Previous</a></li>
@@ -143,7 +158,7 @@
 							<li><a href="#">5</a></li>
 							<li><a href="#">Next</a></li>
 						</ul>
-						<input type="button" id="write_btn" value="글쓰기" />
+						<button type="button" id="write_btn" class="btn btn-default">글쓰기</button>
 
 						<script>
 							$(document).ready(function(){

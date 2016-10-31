@@ -104,3 +104,34 @@
 #updatewriter {
 	opacity: 0.5;
 }
+
+/* article List 테이블 스타일  */
+th.th_title {
+	text-align: center;
+}
+
+td {
+	text-align: center;
+}
+
+td.check_title {
+	width: 50px;
+}
+
+td.num_title {
+	width: 50px;
+}
+
+td.subject_title {
+	width: 600px;
+	text-align: left;
+	padding-left: 10px;
+}
+
+td.writer_title {
+	width: 120px;
+}
+
+td.readcount_title {
+	width: 100px;
+}
