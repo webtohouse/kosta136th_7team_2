@@ -1,6 +1,14 @@
-<!DOCTYPE html>
-<html lang="ko" ng-app>
+<%@page import="java.sql.ResultSetMetaData"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page import="java.sql.DriverManager" %>
+<%@ page import="java.sql.Connection" %>
+<%@ page import="java.sql.Statement" %>
+<%@ page import="java.sql.ResultSet" %>
+<%@ page import="java.sql.ResultSetMetaData" %>
 
+<!DOCTYPE html>
+<html>
 <head>
    <meta charset="UTF-8">
    <title>Default HTML</title>
@@ -8,18 +16,12 @@
    <link rel="stylesheet" href="css/board.css">
    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
-   <script src="../../js/board/board.js"></script>
-   <script src="../../js/board/boardDao.js"></script>
-   <script src="../../js/board/boardController.js"></script>
    <script src="http://code.jquery.com/jquery-2.2.3.min.js"></script>
    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
-   <script src="../../js/board/boardController.js"></script>
 
-
-
-   <!-- 글조회 이벤트 핸들링 -->
-   <script>
+   <!-- <!-- 글조회 이벤트 핸들링 -->
+   <!-- <script>
       $(document).ready(function() {
 
          $('.title_td').click(function() {
@@ -30,20 +32,16 @@
          });
 
       });
-   </script>
+   </script>  -->
 
    <!-- 글쓰기 버튼 이벤트 핸들링 -->
    <script>
       $(document).ready(function() {
 
          $('#write_btn').click(function() {
-            //       아래 코드는 다른 html 파일로 화면을 전환한다.
-            //         다만, 아래코드를 여기서 사용하지는 마라.
-            //       왜냐 현재 뷰이고, 뷰에서 화면전환은 MVC 규칙을 위반하는 것이기 때문에
-            //       document.location = 'writerView.html';
 
-            //        아래 코드는 현재 뷰가 컨트롤러에 글쓰기 화면으로 전환을 요청한다.
-            Controllers.getBoardController().requestWriteView();
+        	 document.location = "boardWrite.jsp";
+        	 
          });
 
       });
@@ -72,64 +70,12 @@
    });
    </script>
 
-   <!-- 선택 삭제 이벤트 핸들링 -->
-   <script>
-      $(document).ready(function() {
-
-         $('#selected_delete_button').click(function() {
-
-            var delete_nums = []; //식제할 번호의 배열
-            var trs = $('tbody').children();
-
-            for (var i = 0; i < trs.length; i++) {
-
-               var checked = trs.eq(i).children().first().children().prop('checked');
-
-               if (checked) {
-                  var num = trs.eq(i).children().eq(1).text();
-                  delete_nums.push(num);
-                  //여기서는 break 하면 안되지요.
-                  //여러개를 체크해서 삭제할 수도 있으니 또 체크된 것이 없나 나머지도 검색해 봐야 겠지요.
-               }
-            }
-
-            //nums 배열을 컨트롤러에 전달하여 레파지토리에서 해당 게시글(들) 삭제
-            Controllers.getBoardController().requestSelectDelete(delete_nums);
-
-         });
-
-      });
-   </script>
-
-   <script>
-      // 글목록 이벤트 핸들링
-      $(document).ready(function() {
-
-         var boards = Controllers.getBoardController().requestSelectAll();
-
-         if (boards.length === 0) {
-            alert('등록된 글이 없습니다.');
-            return;
-         }
-
-         for (var i = 0; i < boards.length; i++) {
-            var td_check = $('<td></td>').html('<input type="checkbox">');
-            var td_num = $('<td></td>').html(boards[i].num);
-            var td_title = $('<td class="title_td"></td>').html(boards[i].title);
-            var td_writer = $('<td></td>').html(boards[i].writer);
-            var td_readCount = $('<td></td>').html(boards[i].readCount);
-
-            var tr = $('<tr></tr>');
-            tr.append(td_check, td_num, td_title, td_writer, td_readCount);
-            $('tbody').append(tr);
-         }
-
-      });
-   </script>
-
 </head>
 
 <body>
+
+
+
 
    <!-- 상단 메뉴바 -->
    <header>
@@ -188,40 +134,52 @@
                   <tr>
                      <th>선택</th>
                      <th>글번호</th>
-                     <th>글내용</th>
+                     <th>글제목</th>
                      <th>작성자</th>
                      <th>조회수</th>
                   </tr>
                </thead>
                <tbody>
+<%
+	Class.forName("com.mysql.jdbc.Driver");
+	
+	Connection conn = null;
+	Statement stmt = null;
+	ResultSet rs = null;
+	
+	String url = "jdbc:mysql://localhost:3306/articledb";
+	String user = "root";
+	String password = "1234";
+	
+	try {
+		conn = DriverManager.getConnection(url, user, password);		
+		stmt = conn.createStatement();
+		String sql = "select num 번호, title 제목, writer 작성자, readCount 조회수 from articles";
+		rs = stmt.executeQuery(sql);
+		ResultSetMetaData rsm = rs.getMetaData();		
+
+            while(rs.next()) {
+%>
                   <tr>
                      <td><input type="checkbox"></td>
-                     <td>1</td>
-                     <td class="title_td">첫글임당</td>
-                     <td>박성용</td>
-                     <td>102</td>
+                     <td><%= rs.getInt("번호") %></td>
+                     <!-- a태그는 링크를 걸어주기위해서 존재한다. -->
+                     <td>
+                    	 <a href=boardRead.jsp?num=<%= rs.getInt("번호") %>><%= rs.getString("제목")  %> </a>
+                     </td>
+                     <td><%= rs.getString("작성자") %></td>
+                     <td><%= rs.getInt("조회수") %></td>
                   </tr>
-                  <tr>
-                     <td><input type="checkbox"></td>
-                     <td>2</td>
-                     <td class="title_td">두 번째 글임당</td>
-                     <td>조현우</td>
-                     <td>102</td>
-                  </tr>
-                  <tr>
-                     <td><input type="checkbox"></td>
-                     <td>3</td>
-                     <td class="title_td">세 번째 글임당</td>
-                     <td>박성용</td>
-                     <td>102</td>
-                  </tr>
-                  <tr>
-                     <td><input type="checkbox"></td>
-                     <td>4</td>
-                     <td class="title_td">네 번째 글임당</td>
-                     <td>김권식</td>
-                     <td>102</td>
-                  </tr>
+<%
+            }
+%>                  
+<%
+            } catch (Exception e) {
+            	
+            } finally {
+            	
+            }
+%>  
                </tbody>
             </table>
 
