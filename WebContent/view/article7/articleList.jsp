@@ -93,10 +93,10 @@
 					%>
 							<tr>
 								<td><input type="checkbox"></td>
-								<td><%= rs.getInt(1) %></td>
-								<td><%= rs.getString(2) %></td>
-								<td><%= rs.getString(4) %></td>
-								<td><%= rs.getInt(5) %></td>
+								<td><%= rs.getInt("num") %></td>
+								<td><%= rs.getString("title") %></td>
+								<td><%= rs.getString("writer") %></td>
+								<td><%= rs.getInt("readCount") %></td>
 							</tr>
 							
 					<% 		}
