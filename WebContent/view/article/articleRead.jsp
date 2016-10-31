@@ -1,22 +1,24 @@
+<%@page import="java.sql.ResultSetMetaData"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page import="java.sql.DriverManager" %>
+<%@ page import="java.sql.Connection" %>
+<%@ page import="java.sql.Statement" %>
+<%@ page import="java.sql.ResultSet" %>
+<%@ page import="java.sql.ResultSetMetaData" %>
+<%@ page import="java.sql.PreparedStatement" %>
 <!DOCTYPE html>
-<html lang="ko" ng-app>
+<html>
 <head>
-<meta charset="UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>readArticle Page</title>
 <link rel="stylesheet" href="../css/common.css">
 <link rel="stylesheet" href="css/article.css">
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-<link rel="stylesheet"
-	href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
-<script src="../../js/article/article.js"></script>
-<script src="../../js/article/articleDao.js"></script>
-<script src="../../js/article/articleController.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
 <script src="http://code.jquery.com/jquery-2.2.3.min.js"></script>
-<script
-	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-<script
-	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
+<script	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<script	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
 
 
 
@@ -26,7 +28,7 @@
 
 		$('#Listreturn_btn').click(function() {
 
-			Controllers.getArticleController().requestListView();
+			document.location = "articleList.jsp";
 
 		});
 	});
@@ -38,7 +40,7 @@
 
 		$('#update_btn').click(function() {
 
-			Controllers.getArticleController().requestUpdateView();
+			document.location = "articleUpload.jsp";
 
 		});
 	});
@@ -49,7 +51,7 @@
 
 		$('#delete_false_btn').click(function() {
 
-			Controllers.getArticleController().requestReadView();
+			document.location = "articleList.jsp";
 
 		});
 	});
@@ -61,43 +63,21 @@
 	$(document).ready(function(){
 
 		$('#delete_success_btn').click(function() {
-			var num = parseInt($('#num').val());
-			Controllers.getArticleController().requestDelete(num);
+			
+			document.location = "deleteProcess.jsp?num=" + $('#readNum').text();
+
 		});
 
 	});
 
 </script>
 
-<!-- 글조회 이벤트 핸들링 -->
-<script type="text/javascript">
-
-	$(document).ready(function() {
-
-			var requestUrl = window.location.href; //주소 복사
-    	var requestQueryString = window.location.href.slice(requestUrl.indexOf('?') + 1); //requestUrl.indexOf('?') 시작  +1끝
-    	console.log(requestQueryString);
-    	var requestParameters = requestQueryString.split('&'); //분해
-			console.log(requestParameters);
-
-    	var num = requestParameters[0].split('=')[1];
-    	var title = requestParameters[1].split('=')[1];
-    	var content = requestParameters[2].split('=')[1];
-    	var writer = requestParameters[3].split('=')[1];
-    	var readCount = requestParameters[4].split('=')[1];
-
-    	$('#num').val(num);
-    	$('#title').val(title);
-    	$('#content').val(content);
-    	$('#writer').val(writer);
-    	$('#readCount').val(readCount);
-
-});
-
 </script>
 
 </head>
 <body class="readbody">
+
+
 	<header>
 		<nav class="navbar navbar-inverse">
 			<div class="container-fluid">
@@ -127,53 +107,84 @@
 		</nav>
 	</header>
 	<section>
+	
+	<%
+	Class.forName("com.mysql.jdbc.Driver");
+	
+	Connection conn = null;
+	PreparedStatement pstmt =null;
+	ResultSet rs = null;
+	
+	int num = Integer.parseInt(request.getParameter("num"));
+	
+	String url = "jdbc:mysql://localhost:3306/articledb";
+	String user = "root";
+	String password = "1234";
+	
+	try {
+		conn = DriverManager.getConnection(url, user, password);
+		
+		String sql = "select num 번호, title 제목, content 내용, writer 작성자, readCount 조회수 from articles where num = ?";
+		pstmt = conn.prepareStatement(sql);
+		pstmt.setInt(1, num);		
+		rs = pstmt.executeQuery();
+		ResultSetMetaData rsm = rs.getMetaData();
+		%>
+		
+
 		<div class="container">
 
 			<span class="text-center"><h3>Search Article Info Page</h3></span> <span
 				id="selectspan_right">글이 조회되었습니다.</span>
 			<hr>
+	<%
+		if(rs.next()) {
+	%>
 			<form action="" class="form-horizontal">
 
 				<div class="form-group">
-					<label for="number" class="control-label col-sm-2 font-sizeup">Number
-						: </label>
-					<div class="col-sm-10 " id="readNum">
-						<!-- Number Data Info update -->
+					<label for="number" class="control-label col-sm-2 font-sizeup">Number : </label>
+					<div class="col-sm-10 " id="readNum" name="num">
+						<%= rs.getInt("번호") %>
 					</div>
 				</div>
 
 				<div class="form-group">
-					<label for="title" class="control-label col-sm-2 font-sizeup">Title
-						: </label>
-					<div class="col-sm-10 " id="readTitle">
-						<!-- Title Data Info update -->
+					<label for="title" class="control-label col-sm-2 font-sizeup">Title : </label>
+					<div class="col-sm-10 " id="readTitle" name="title">
+						<%= rs.getString("제목") %>
 					</div>
 				</div>
 
 				<div class="form-group">
-					<label for="content" class="control-label col-sm-2 font-sizeup">Content
-						: </label>
-					<div class="col-sm-10 " id="readContent">
-						<!-- Content Data Info update -->
+					<label for="content" class="control-label col-sm-2 font-sizeup">Content : </label>
+					<div class="col-sm-10 " id="readContent" name="content">
+						<%= rs.getString("내용") %>
 					</div>
 				</div>
 
 				<div class="form-group">
-					<label for="writer" class="control-label col-sm-2 font-sizeup">Writer
-						: </label>
-					<div class="col-sm-10 " id="readWriter">
-						<!-- Writer Data Info update -->
+					<label for="writer" class="control-label col-sm-2 font-sizeup">Writer : </label>
+					<div class="col-sm-10 " id="readWriter" name="writer">
+						<%= rs.getString("작성자") %>
 					</div>
 				</div>
 
 				<div class="form-group">
-					<label for="readCount" class="control-label col-sm-2 font-sizeup">ReadCount
-						: </label>
-					<div class="col-sm-10 " id="readCount">
-						<!-- ReadCount Data Info update -->
+					<label for="readCount" class="control-label col-sm-2 font-sizeup">ReadCount : </label>
+					<div class="col-sm-10 " id="readCount" name="readCount">
+						<%= rs.getInt("조회수") %>
 					</div>
 				</div>
 				<hr>
+<% 
+		}
+%>		
+<%		
+	} catch (Exception e) {
+		e.printStackTrace();
+	}
+%>
 				<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-10" id="selectOne_btns">
 						<input type="button" id="Listreturn_btn" value="List" /> <input
@@ -215,6 +226,7 @@
 					</div>
 				</div>
 		</div>
+
 	</section>
 	<footer id="footer" class="container-fluid text-center">
 		<div class="container">

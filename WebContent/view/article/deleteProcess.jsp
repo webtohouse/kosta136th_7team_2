@@ -1,15 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    
 <%@ page import="java.sql.DriverManager" %>
 <%@ page import="java.sql.Connection" %>
 <%@ page import="java.sql.PreparedStatement" %>
 
 <%
 	request.setCharacterEncoding("UTF-8");
-
-	String title = request.getParameter("title");
-	String content = request.getParameter("content");
-	String writer = request.getParameter("writer");
+	int num = Integer.parseInt(request.getParameter("num"));
 
 	Class.forName("com.mysql.jdbc.Driver");
 	Connection conn = null;
@@ -21,17 +19,13 @@
 	
 	try {
 		conn = DriverManager.getConnection(url, user, password);
-		String sql = "insert into articles(title, content, writer) values(?, ?, ?)";
+		String sql = "delete from articles where num = ?";
 		pstmt = conn.prepareStatement(sql);
-		pstmt.setString(1, title);
-		pstmt.setString(2, content);
-		pstmt.setString(3, writer);
-		pstmt.executeUpdate();
+		pstmt.setInt(1, num);
+		pstmt.execute();
 		
 		response.sendRedirect("articleList.jsp");
-		
 	} catch(Exception e) {
 		e.printStackTrace();
 	}
-	
 %>
