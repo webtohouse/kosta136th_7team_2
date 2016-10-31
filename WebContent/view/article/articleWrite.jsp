@@ -1,8 +1,12 @@
+
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+
 <!DOCTYPE html>
-<html lang="ko" ng-app>
+<html>
 <head>
-	<meta charset="UTF-8">
-	<title>articleWrite HTML</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>articleWrite HTML</title>
 	<link rel="stylesheet" href="../css/common.css">
 	<link rel="stylesheet" href="css/article.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
@@ -10,24 +14,15 @@
 	<script src="http://code.jquery.com/jquery-2.2.3.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
-
-	
-		
-	
 	
 	<!-- save btn 핸들링 -->
-	<script>
+	<script class="savedate">
 
 	  	$(document).ready(function() {
 
 	  		$('#save_btn').click(function() {
 
-	  			var title = $('#title').val();
-	  			var content = $('#content').val();
-	  			var writer = $('#writer').val();
-	  			var article = new Article(title, content, writer);
-
-	  			Controllers.getArticleController().requestSave(article);
+	  			document.location = "articleList.jsp";
 
 	  		});
 	  	});
@@ -40,7 +35,7 @@
 
 	  		$('#cancel_btn').click(function() {
 
-	  			Controllers.getArticleController().requestListView();
+	  			document.location = "articleList.jsp";
 
 				});
 
@@ -49,6 +44,8 @@
 </script>
 </head>
 <body class="writeview">
+
+
 	<header>
 		<nav class="navbar navbar-inverse">
 			<div class="container-fluid">
@@ -85,26 +82,26 @@
 		<div class="container">
 			<h1 class="title">Article register Page</h1>
 			<hr>
-			<form action="" class="form-horizontal">
+			<form method="post" action="writeProcess.jsp" class="form-horizontal">
 
 				<div class="form-group" id="writetitle">
 					<label for="title" class="control-label col-sm-2 font-sizeup">Title : </label>
 					<div class="col-sm-10 ">
-						<input type="text" class="form-control" id="title" placeholder="Title input" />
+						<input type="text" name="title" class="form-control" id="title" placeholder="Title input" />
 					</div>
 				</div>
 
 				<div class="form-group" id="writecontent">
 					<label for="content" class="control-label col-sm-2 font-sizeup">Content : </label>
 					<div class="col-sm-10 ">
-						<textarea class="form-control" id="content" rows="10" placeholder="Content input" /></textarea>
+						<textarea class="form-control" name="content" id="content" rows="10" placeholder="Content input" /></textarea>
 					</div>
 				</div>
 
 				<div class="form-group" id="writewriter">
 					<label for="writer" class="control-label col-sm-2 font-sizeup">Writer : </label>
 					<div class="col-sm-10 ">
-						<input type="text" class="form-control" id="writer" placeholder="Writer Input" />
+						<input type="text" name="writer" class="form-control" id="writer" placeholder="Writer Input" />
 					</div>
 				</div>
 
