@@ -1,15 +1,20 @@
+<%@page import="java.sql.ResultSetMetaData"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page import="java.sql.DriverManager" %>
+<%@ page import="java.sql.Connection" %>
+<%@ page import="java.sql.Statement" %>
+<%@ page import="java.sql.ResultSet" %>
+<%@ page import="java.sql.ResultSetMetaData" %>
 <!DOCTYPE html>
-<html lang="ko" ng-app>
+<html>
 <head>
-<meta charset="UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>articleList HTML</title>
 <link rel="stylesheet" href="../css/common.css">
 <link rel="stylesheet" href="css/article.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
-<script src="../../js/article/article.js"></script>
-<script src="../../js/article/articleDao.js"></script>
-<script src="../../js/article/articleController.js"></script>
 <script src="http://code.jquery.com/jquery-2.2.3.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
@@ -20,7 +25,7 @@
 
   		$('#write_btn').click(function() {
 
-  			Controllers.getArticleController().requestWriteView();
+  			document.location = "articleWrite.jsp";
 
   		});
 
@@ -34,108 +39,9 @@
 
 		$('.title_td').click(function() {
 
-			alert("클릭되었습니다");
-			var num = parseInt($(this).prev().text());
-			var article = Controllers.getArticleController().requestSelectOne(num);
-
+			document.location = "articleRead.jsp";
+			
 		});
-
-	});
-
-</script>
-
-<!-- 전체 선택 이벤트 핸들링 -->
-<script>
-
-		$(document).ready(function() {
-
-			$('#all_check').click(function(){
-
-				var trs = $('tbody').children();
-
-				if (this.checked) {
-					for(var i = 0 ; i < trs.length ; i++) {
-						trs.eq(i).children().first().children().prop('checked', true);
-					}
-	            } else {
-					for(var i = 0 ; i < trs.length ; i++) {
-						trs.eq(i).children().first().children().prop('checked', false);
-					}
-	            }
-
-			});
-
-		});
-
-</script>
-
-<!-- 삭제 취소 btn 핸들링 -->
-<script>
-  	$(document).ready(function() {
-
-  		$('#delete_false_btn').click(function() {
-
-  			Controllers.getArticleController().requestListView();
-
-  		});
-
-  	});
-</script>
-
-<!-- 선택 삭제 이벤트 핸들링 -->
-<script>
-
-	$(document).ready(function() {
-
-		$('#delete_success_btn').click(function(){
-
-			var delete_nums = [];
-			var trs = $('tbody').children();
-
-			for(var i = 0 ; i < trs.length ; i++) {
-
-				var checked = trs.eq(i).children().first().children().prop('checked');
-
-				if(checked) {
-					var num = trs.eq(i).children().eq(1).text();
-					delete_nums.push(num);
-					//여기서는 break 하면 안되지요.
-					//여러개를 체크해서 삭제할 수도 있으니 또 체크된 것이 없나 나머지도 검색해 봐야 겠지요.
-				}
-			}
-
-			//nums 배열을 컨트롤러에 전달하여 레파지토리에서 해당 게시글(들) 삭제
-			Controllers.getArticleController().requestSelectDelete(delete_nums);
-
-		});
-
-	});
-
-</script>
-
-<!-- 글목록 이벤트 핸들링 -->
-<script type="text/javascript">
-
-	$(document).ready(function() {
-
-		var articles = Controllers.getArticleController().requestSelectAll();
-
-		if(articles.length === 0) {
-			alert('등록된 글이 없습니다.');
-			return;
-		}
-
-		for(var i = 0 ; i < articles.length ; i++) {
-			var td_check = $('<td></td>').html('<input type="checkbox">');
-			var td_num = $('<td></td>').html(articles[i].num);
-			var td_title = $('<td class="title_td"></td>').html(articles[i].title);
-			var td_writer = $('<td></td>').html(articles[i].writer);
-			var td_readCount = $('<td></td>').html(articles[i].readCount);
-
-			var tr = $('<tr></tr>');
-			tr.append(td_check, td_num, td_title, td_writer, td_readCount);
-			$('tbody').append(tr);
-		}
 
 	});
 
@@ -143,6 +49,8 @@
 
 </head>
 <body>
+
+
 	<header>
 		<nav class="navbar navbar-inverse">
 			<div class="container-fluid">
@@ -171,6 +79,8 @@
 			</div>
 		</nav>
 	</header>
+	
+	
 	<section>
 		<div class="jumbotron text-center" id="Listjumbotron">
 			<h1>Article List page</h1>
@@ -184,7 +94,6 @@
 			<table class="table table-hover">
 				<thead>
 					<tr>
-						<th>Select</th>
 						<th>Number</th>
 						<th>Title</th>
 						<th>Writer</th>
@@ -192,16 +101,61 @@
 					</tr>
 				</thead>
 				<tbody>
+							<%
+		Class.forName("com.mysql.jdbc.Driver");
+		
+		Connection conn = null;
+		Statement stmt =null;
+		ResultSet rs = null;
+		
+		String url = "jdbc:mysql://localhost:3306/articledb";
+		String user = "root";
+		String password = "1234";
+		
+		try {
+			conn = DriverManager.getConnection(url, user, password);
+			stmt = conn.createStatement();
+			String sql = "select num 번호, title 제목, writer 작성자, readCount 조회수 from articles";
+			rs = stmt.executeQuery(sql);
+			ResultSetMetaData rsm = rs.getMetaData();		
 
+			while(rs.next()) {
+	%>
+					<tr>
+						<td><%= rs.getInt("번호") %></td>
+						<td>
+							<a href=articleRead.jsp?num=<%= rs.getInt("번호") %>><%= rs.getString("제목") %></a>
+							
+						</td>
+						<td><%= rs.getString("작성자") %></td>
+						<td><%= rs.getInt("조회수") %></td>
+					</tr>
+	<%
+			}
+
+	%>			
+			
+	<%		
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(rs != null) {
+				try { rs.close(); } catch(Exception e) {}
+			}
+			if(stmt != null) {
+				try { stmt.close(); } catch(Exception e) {}
+			}
+			if(conn != null) {
+				try { conn.close(); } catch(Exception e) {}
+			}
+		}
+
+	%>
 				</tbody>
 			</table>
-			<label for="all_check"> <input type="checkbox" id="all_check"
-				name="all_check"> 전체 선택
+
 				<hr>
 				<div class="container text-center">
-
-					<input type="button" id="delete_btn" data-toggle="modal"
-						data-target="#myModal" value="삭제" />
 
 					<ul class="pagination pagination-lg pager">
 						<li><a href="#">Previous</a></li>
@@ -217,41 +171,11 @@
 				<div class="container text-center">
 					<input type="text" /> <input type="button" id="search_btn"
 						value="검색" />
-				</div> <!-- Modal -->
-				<div class="modal fade" id="myModal" role="dialog">
-					<div class="modal-dialog">
-
-						<!-- Modal content-->
-						<div class="modal-content">
-							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal">×</button>
-								<h4>
-									<span class="glyphicon glyphicon-lock"></span> Delete
-								</h4>
-							</div>
-							<div class="modal-body">
-								<form role="form">
-									<div class="form-group">
-										<label for="deletequestion"><span
-											class="glyphicon glyphicon-user"></span>삭제 하시겠습니까?</label> <input
-											type="button" class="form-control" id="delete_success_btn"
-											value="네"> <input type="button" class="form-control"
-											id="delete_false_btn" value="아니요">
-									</div>
-								</form>
-							</div>
-							<div class="modal-footer">
-								<button type="submit"
-									class="btn btn-danger btn-default pull-left"
-									data-dismiss="modal">
-									<span class="glyphicon glyphicon-remove"></span> Cancel
-								</button>
-							</div>
-						</div>
-					</div>
 				</div>
 		</div>
 	</section>
+	
+	
 	<footer id="footer" class="container-fluid text-center">
 		<div class="container">
 			<div class="row">
