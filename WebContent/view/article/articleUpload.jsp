@@ -24,7 +24,9 @@
 		$('#date_up_btn').click(function() {
 
 		alert('수정 버튼 클릭됨.');
-		document.location = "updateProcess.jsp?num=" + $('#number').val() + "&title=" + $('#title').val() + "&content=" + $('#content').val() + "&writer=" + $('#writer').val();
+		
+		document.location = "updateProcess.jsp?num=" + $('#number').text() + "&title=" + $('#title').val() + "&content=" + $('#content').val() + "&writer=" + $('#writer').val();
+		alert(num);
 		});
 	});
 </script>

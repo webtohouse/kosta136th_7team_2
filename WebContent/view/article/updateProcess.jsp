@@ -11,6 +11,7 @@
 	String content = request.getParameter("content");
 	String writer = request.getParameter("writer");
 
+
 	Class.forName("com.mysql.jdbc.Driver");
 	Connection conn = null;
 	PreparedStatement pstmt = null;
@@ -21,15 +22,15 @@
 	
 	try {
 		conn = DriverManager.getConnection(url, user, password);
-		String sql = "update from articles(title,content,writer) where num = ?";
+		String sql = "update articles set title = ?, content = ?, writer = ? where num = ?";
 		pstmt = conn.prepareStatement(sql);
-		pstmt.setInt(1, num);
-		pstmt.setString(2, title);
-		pstmt.setString(3, content);
-		pstmt.setString(4, writer);
+		pstmt.setString(1, title);
+		pstmt.setString(2, content);
+		pstmt.setString(3, writer);
+		pstmt.setInt(4, num);
 		pstmt.execute();
 		
-		response.sendRedirect("selectAll.jsp");
+		response.sendRedirect("articleList.jsp");
 	} catch(Exception e) {
 		e.printStackTrace();
 	}
