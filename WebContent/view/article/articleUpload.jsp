@@ -24,16 +24,7 @@
 		$('#date_up_btn').click(function() {
 
 		alert('수정 버튼 클릭됨.');
-
-			var number = $('#number').val();
-			var title = $('#title').val(); 
-			var content = $('#content').val(); 
-			var writer = $('#writer').val(); 
-			var article = new Article(title, content, writer);
-			article.num = number
-			
-			var isSuccess = Controllers.getArticleController().requestUpdate(article);
-			
+		document.location = "updateProcess.jsp?num=" + $('#number').val() + "&title=" + $('#title').val() + "&content=" + $('#content').val() + "&writer=" + $('#writer').val();
 		});
 	});
 </script>
@@ -44,7 +35,7 @@
   		
   		$('#date_cancle_btn').click(function() {
   			
-  			Controllers.getArticleController().requestListView();
+  			document.location = "articleRead.jsp?num=" + $('#number').text();
   			
   		});
   	});
@@ -88,13 +79,14 @@
 			<span>Update Article Info Input Please</span>
 			<hr>
 
-			<form action=" " class="form-horizontal">
+			<form method="post" action="updateProcess.jsp" class="form-horizontal">
 
 
 				<div class="form-group" id="updateNumber">
-					<label for="number" class="control-label col-sm-2">Number : </label>
+					<label for="number" name="number" class="control-label col-sm-2">Number : </label>
 					<div class="col-sm-10" id="number">
-											
+						<% int num = Integer.parseInt(request.getParameter("num"));%>
+						<% out.println(num);%>
 					</div>
 				</div>
 				
@@ -102,7 +94,7 @@
 				<div class="form-group" id="updatetitle">
 					<label for="title" class="control-label col-sm-2">Title : </label>
 					<div class="col-sm-10">
-						<input type="text" class="form-control" id="title"
+						<input type="text" name="title" class="form-control" id="title"
 							placeholder="수정할 제목을 입력하세요">
 					</div>
 				</div>
@@ -111,7 +103,7 @@
 					<label for="content" class="control-label col-sm-2">Content
 						: </label>
 					<div class="col-sm-10">
-						<textarea class="form-control" id="content" rows="10"
+						<textarea class="form-control" name="content" id="content" rows="10"
 							placeholder="수정할 내용을 입력하세요"></textarea>
 					</div>
 				</div>
@@ -120,15 +112,15 @@
 					<label for="writer" class="control-label col-sm-2">Writer :
 					</label>
 					<div class="col-sm-10">
-						<input type="text" class="form-control" id="writer"
+						<input type="text" name="writer" class="form-control" id="writer"
 							placeholder="수정할 작성자를 입력하세요">
 					</div>
 				</div>
 				<hr>
 				<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-10">
-						<input type="button" id="date_cancle_btn" value="Cancle" /> <input
-							type="button" id="date_up_btn" value="Update" />
+						<input type="button" id="date_cancle_btn" value="Cancle" /> 
+						<input type="button" id="date_up_btn" value="Update">
 					</div>
 				</div>
 

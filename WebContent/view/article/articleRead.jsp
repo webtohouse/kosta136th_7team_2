@@ -40,8 +40,8 @@
 
 		$('#update_btn').click(function() {
 
-			document.location = "articleUpload.jsp";
-
+			document.location = "articleUpload.jsp?num=" + $('#readNum').text();
+			
 		});
 	});
 </script>
@@ -51,7 +51,7 @@
 
 		$('#delete_false_btn').click(function() {
 
-			document.location = "articleList.jsp";
+			document.location = "articleRead.jsp?num=" + $('#readNum').text();
 
 		});
 	});
