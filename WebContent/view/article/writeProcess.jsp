@@ -17,22 +17,22 @@
 <body>
 
 <%
-	  			request.setCharacterEncoding("UTF-8");
+	  		request.setCharacterEncoding("UTF-8");
 
-	  			String title = request.getParameter("title");
-	  			String content = request.getParameter("content");
-	  			String writer = request.getParameter("writer");
+	  		String title = request.getParameter("title");
+	  		String content = request.getParameter("content");
+	  		String writer = request.getParameter("writer");
 	  			
-	  			Class.forName("com.mysql.jdbc.Driver");
+	  		Class.forName("com.mysql.jdbc.Driver");
 	  			
-	  			Connection conn = null;
-	  			Statement stmt =null;
-	  			ResultSet rs = null;
-	  			PreparedStatement pstmt = null;
+	  		Connection conn = null;
+	  		Statement stmt =null;
+	  		ResultSet rs = null;
+	  		PreparedStatement pstmt = null;
 	  			
-	  			String url = "jdbc:mysql://localhost:3306/articledb";
-	  			String user = "root";
-	  			String password = "1234";
+	  		String url = "jdbc:mysql://localhost:3306/articledb";
+	  		String user = "root";
+	  		String password = "1234";
 	  			
 	  			try {
 	  				conn = DriverManager.getConnection(url, user, password);
@@ -46,16 +46,6 @@
 	  				response.sendRedirect("articleList.jsp");
 	  			} catch (Exception e) {
 	  				e.printStackTrace();
-	  			} finally {
-	  				if(rs != null) {
-	  					try { rs.close(); } catch(Exception e) {}
-	  				}
-	  				if(stmt != null) {
-	  					try { stmt.close(); } catch(Exception e) {}
-	  				}
-	  				if(conn != null) {
-	  					try { conn.close(); } catch(Exception e) {}
-	  				}
 	  			}
 	  		%>
 

@@ -78,7 +78,7 @@
 						
 						String url = "jdbc:mysql://localhost:3306/articledb";
 						String user = "root";
-						String password = "123456";
+						String password = "1234";
 					
 						try{
 							

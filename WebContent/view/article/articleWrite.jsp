@@ -15,20 +15,6 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
 	
-	<!-- save btn 핸들링 -->
-	<script class="savedate">
-
-	  	$(document).ready(function() {
-
-	  		$('#save_btn').click(function() {
-
-	  			document.location = "articleList.jsp";
-
-	  		});
-	  	});
-
-	</script>
-
 	<!-- cancel btn 핸들링 -->
 	<script>
 	  	$(document).ready(function() {
@@ -110,7 +96,7 @@
 				<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-10" id="registe_btns">
 						<input type="button" id="cancel_btn" value="Cancel" />
-						<input type="button" id="save_btn" value="Save" />
+						<button type="submit" id="save_btn" >Save</button>
 					</div>
 				</div>
 

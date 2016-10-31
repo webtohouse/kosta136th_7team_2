@@ -47,83 +47,6 @@
 
 </script>
 
-<!-- 글목록 이벤트 핸들링 -->
-<script type="text/javascript">
-
-	$(document).ready(function() {
-
-		<%
-		Class.forName("com.mysql.jdbc.Driver");
-		
-		Connection conn = null;
-		Statement stmt =null;
-		ResultSet rs = null;
-		
-		String url = "jdbc:mysql://localhost:3306/articledb";
-		String user = "root";
-		String password = "1234";
-		
-		try {
-			conn = DriverManager.getConnection(url, user, password);
-			stmt = conn.createStatement();
-			String sql = "select num 번호, title 제목, writer 작성자, readCount 조회수 from articles";
-			rs = stmt.executeQuery(sql);
-			ResultSetMetaData rsm = rs.getMetaData();		
-	%>
-			<table>
-				<thead>
-					<tr>
-	<%
-			for(int i = 1 ; i <= rsm.getColumnCount() ; i++) {
-	%>
-	<%-- 					<th><%= rsm.getColumnName(i) %></th> --%>
-						<th><%= rsm.getColumnLabel(i) %></th>
-	<%
-			}					
-	%>
-					</tr>
-				</thead>
-				<tbody>
-	<%
-			while(rs.next()) {
-	%>
-					<tr>
-						<td><%= rs.getInt("번호") %></td>
-						<td>
-							<a href=selectOne.jsp?num=<%= rs.getInt("번호") %>><%= rs.getString("제목") %></a>
-						</td>
-						<td><%= rs.getString("작성자") %></td>
-						<td><%= rs.getInt("조회수") %></td>
-					</tr>
-	<%
-			}
-
-	%>			
-				</tbody>
-			</table>
-			
-			<form method="post" action="writeForm.jsp">
-				<input type="submit" value="글쓰기">
-			</form>		
-	<%		
-		} catch(Exception e) {
-			e.printStackTrace();
-		} finally {
-			if(rs != null) {
-				try { rs.close(); } catch(Exception e) {}
-			}
-			if(stmt != null) {
-				try { stmt.close(); } catch(Exception e) {}
-			}
-			if(conn != null) {
-				try { conn.close(); } catch(Exception e) {}
-			}
-		}
-
-	%>
-
-</script>
-
 </head>
 <body>
 
@@ -171,7 +94,6 @@
 			<table class="table table-hover">
 				<thead>
 					<tr>
-						<th>Select</th>
 						<th>Number</th>
 						<th>Title</th>
 						<th>Writer</th>
@@ -179,16 +101,61 @@
 					</tr>
 				</thead>
 				<tbody>
+							<%
+		Class.forName("com.mysql.jdbc.Driver");
+		
+		Connection conn = null;
+		Statement stmt =null;
+		ResultSet rs = null;
+		
+		String url = "jdbc:mysql://localhost:3306/articledb";
+		String user = "root";
+		String password = "1234";
+		
+		try {
+			conn = DriverManager.getConnection(url, user, password);
+			stmt = conn.createStatement();
+			String sql = "select num 번호, title 제목, writer 작성자, readCount 조회수 from articles";
+			rs = stmt.executeQuery(sql);
+			ResultSetMetaData rsm = rs.getMetaData();		
 
+			while(rs.next()) {
+	%>
+					<tr>
+						<td><%= rs.getInt("번호") %></td>
+						<td>
+							<a href=articleRead.jsp?num=<%= rs.getInt("번호") %>><%= rs.getString("제목") %></a>
+							
+						</td>
+						<td><%= rs.getString("작성자") %></td>
+						<td><%= rs.getInt("조회수") %></td>
+					</tr>
+	<%
+			}
+
+	%>			
+			
+	<%		
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(rs != null) {
+				try { rs.close(); } catch(Exception e) {}
+			}
+			if(stmt != null) {
+				try { stmt.close(); } catch(Exception e) {}
+			}
+			if(conn != null) {
+				try { conn.close(); } catch(Exception e) {}
+			}
+		}
+
+	%>
 				</tbody>
 			</table>
-			<label for="all_check"> <input type="checkbox" id="all_check"
-				name="all_check"> 전체 선택
+
 				<hr>
 				<div class="container text-center">
-
-					<input type="button" id="delete_btn" data-toggle="modal"
-						data-target="#myModal" value="삭제" />
 
 					<ul class="pagination pagination-lg pager">
 						<li><a href="#">Previous</a></li>
@@ -204,38 +171,6 @@
 				<div class="container text-center">
 					<input type="text" /> <input type="button" id="search_btn"
 						value="검색" />
-				</div> <!-- Modal -->
-				<div class="modal fade" id="myModal" role="dialog">
-					<div class="modal-dialog">
-
-						<!-- Modal content-->
-						<div class="modal-content">
-							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal">×</button>
-								<h4>
-									<span class="glyphicon glyphicon-lock"></span> Delete
-								</h4>
-							</div>
-							<div class="modal-body">
-								<form role="form">
-									<div class="form-group">
-										<label for="deletequestion"><span
-											class="glyphicon glyphicon-user"></span>삭제 하시겠습니까?</label> <input
-											type="button" class="form-control" id="delete_success_btn"
-											value="네"> <input type="button" class="form-control"
-											id="delete_false_btn" value="아니요">
-									</div>
-								</form>
-							</div>
-							<div class="modal-footer">
-								<button type="submit"
-									class="btn btn-danger btn-default pull-left"
-									data-dismiss="modal">
-									<span class="glyphicon glyphicon-remove"></span> Cancel
-								</button>
-							</div>
-						</div>
-					</div>
 				</div>
 		</div>
 	</section>
