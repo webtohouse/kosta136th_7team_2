@@ -1,15 +1,8 @@
-<%@ page import="java.sql.ResultSetMetaData"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ page import="java.sql.DriverManager"%>
-<%@ page import="java.sql.Connection"%>
-<%@ page import="java.sql.Statement"%>
-<%@ page import="java.sql.ResultSet"%>
-<%@ page import="java.sql.ResultSetMetaData"%>
 
 <!DOCTYPE html>
 <html lang="ko" ng-app>
-
 <head>
 <meta charset="UTF-8">
 <title>Default HTML</title>
@@ -23,7 +16,7 @@
 
 <script>
 
-  $(document).ready(function() {
+/*   $(document).ready(function() {
   		
   	$('#write_btn').click(function() {
   			
@@ -33,6 +26,8 @@
   		
   });
   
+  */
+  
    $(document).ready(function() {
   
 	$('#boardList_btn').click(function() {
@@ -41,7 +36,7 @@
 		
 	});
 		
-}); 
+	});  
   
 </script>
 
@@ -68,7 +63,7 @@
 						<li class="active"><a href="../index.html">Home</a></li>
 						<li><a href="../aboutUs/aboutUs.html">About Us</a></li>
 						<li><a href="../article/articleList.html">Article</a></li>
-						<li><a href="boardList.html">board</a></li>
+						<li><a href="boardList.jsp">board</a></li>
 						<li><a href="../qna/qnaList.html">QnA</a></li>
 						<li><a href="../login/signup.html">SignUp</a></li>
 					</ul>
@@ -91,51 +86,32 @@
 
 	<section>
 		<div class="container">
-	
-<%
-	Class.forName("com.mysql.jdbc.Driver");
-	
-	Connection conn = null;
-	Statement stmt = null;
-	ResultSet rs = null;
-	
-	String url = "jdbc:mysql://localhost:3306/articledb";
-	String user = "root";
-	String password = "1234";
-	
-/* 	try {
-		conn = DriverManager.getConnection(url, user, password);		
-		stmt = conn.createStatement();
-		String sql = "UPDATE articles SET num = ?, title = ?, writer = ?, readCount = ?";
-		rs = stmt.executeQuery(sql);
-		ResultSetMetaData rsm = rs.getMetaData();	 */	
-           
-%>
 
-			<form action="" class="form-horizontal">
+			<!-- post타입!!!!!!!!!!! -->
+			<form method="post" action="boardWriteProcess.jsp" class="form-horizontal">
 				<div class="form-group">
 					<label for="title" class="col-sm-2">제목:</label>
 					<div class="col-sm-10">
-						<input type="title" class="form-control" id="title">
+						<input type="text" name ="title" class="form-control" id="title">
 					</div>
 				</div>
 
 				<div class="form-group">
 					<label for="writer" class="col-sm-2">작성자:</label>
 					<div class="col-sm-10">
-						<input type="writer" class="form-control" id="writer">
+						<input type="text" name ="writer"  class="form-control" id="writer">
 					</div>
 				</div>
 
 				<div class="form-group">
 					<label for="content" class="col-sm-2">내용:</label>
 					<div class="col-sm-10">
-						<textarea class="form-control" rows="5" id="content"></textarea>
+						<textarea class="form-control" name ="content"  rows="5" id="content"></textarea>
 					</div>
 				</div>
 
 				<div class="buttons" align="right" id="buttons">
-					<button type="button" class="btn btn-primary" id="write_btn">등록</button>
+					<button type="submit" class="btn btn-primary" id="write_btn">등록</button>
 					<button type="button" class="btn btn-danger" id="boardList_btn">목록</button>
 				</div>
 
@@ -159,7 +135,7 @@
 					<ul>
 						<li><a href="skills.html">Board</a></li>
 						<li><a href="gallery.html">Article</a></li>
-						<li><a href="board.html">Board</a></li>
+						<li><a href="boardList.jsp">Board</a></li>
 						<li><a href="shop.html">Q&amp;A</a></li>
 						<li><a href="join.html">Join</a></li>
 						<li><a href="login.html">Login</a></li>
