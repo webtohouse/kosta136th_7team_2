@@ -153,3 +153,23 @@ label.textred {
 	font-weight: normal;
 	color: red;
 }
+
+#footer_logo {
+	color: #e8e8e8;
+}
+
+div.footer_address {
+	color: #e8e8e8;
+}
+
+div.footer_category {
+	color: #e8e8e8;
+}
+
+div.col-sm-2.footer_category ul li a{
+	color: #e8e8e8;
+}
+
+div.col-sm-2.footer_category ul li a:hover{
+	color: #616161;
+}

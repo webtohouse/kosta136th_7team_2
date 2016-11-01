@@ -234,22 +234,22 @@
 			<div class="container">
 				<div class="row">
 					<div class="col-sm-2">
-						<h2>BitCoin</h2>
+						<h2 id="footer_logo">BitCoin</h2>
 					</div>
-					<div class="col-sm-8">
+					<div class="col-sm-8 footer_address">
 						<p>가산디지털단지역 KOSTA 사무실 || 고객상담실 : 080 - 000 - 0000 || 대표이사 : 박성용</p>
 						<p>통신판매업 신고번호 서울-11111호</p>
 						<p>Copyright &copy; 2016 psy Co., ltd ALL RIGHTS RESERVED</p>
 					</div>
-					<div class="col-sm-2">
+					<div class="col-sm-2 footer_category">
 						<h4>Category</h4>
 						<ul>
-	            <li><a href="../board/boardList.html">board</a></li>
-	            <li><a href="../aboutUs/aboutUs.html">About Us</a></li>
-	            <li><a href="articleList.html">Article</a></li>
-	            <li><a href="../qna/qnaList.html">QnA</a></li>
-	            <li><a href="../login/signup.html">SignUp</a></li>
-	            <li><a href="../login/login.html">Login</a></li>
+				            <li><a href="../board/boardList.html">board</a></li>
+				            <li><a href="../aboutUs/aboutUs.html">About Us</a></li>
+				            <li><a href="articleList.html">Article</a></li>
+				            <li><a href="../qna/qnaList.html">QnA</a></li>
+				            <li><a href="../login/signup.html">SignUp</a></li>
+				            <li><a href="../login/login.html">Login</a></li>
 						</ul>
 					</div>
 				</div>
