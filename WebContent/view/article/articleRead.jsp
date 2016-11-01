@@ -19,13 +19,28 @@
 <script src="http://code.jquery.com/jquery-2.2.3.min.js"></script>
 <script	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 <script	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
+<script>	
 
+$(document).ready(function(){
+	
+	$('body').keyup(function(){
+        
+		if(event.keyCode == 116){
+ 
+        	document.location = "articleList.jsp";
+        	
+        }
+		
+    });	
+	
+});
 
+</script>
 
 <!-- ListReturn btn 핸들링 -->
 <script>
 	$(document).ready(function() {
-
+		
 		$('#Listreturn_btn').click(function() {
 
 			document.location = "articleList.jsp";
@@ -40,8 +55,8 @@
 
 		$('#update_btn').click(function() {
 
-			document.location = "articleUpload.jsp";
-
+			document.location = "articleUpload.jsp?num=" + $('#readNum').text();
+			
 		});
 	});
 </script>
@@ -51,7 +66,7 @@
 
 		$('#delete_false_btn').click(function() {
 
-			document.location = "articleList.jsp";
+			document.location = "articleRead.jsp?num=" + $('#readNum').text();
 
 		});
 	});
@@ -124,11 +139,19 @@
 	try {
 		conn = DriverManager.getConnection(url, user, password);
 		
+ 		String sql1 = "update articles set readCount = readCount + 1 where num =?";
+		pstmt = conn.prepareStatement(sql1);
+		pstmt.setInt(1, num);
+		int result = pstmt.executeUpdate();
+		
+		if(result != 0){
+		
 		String sql = "select num 번호, title 제목, content 내용, writer 작성자, readCount 조회수 from articles where num = ?";
 		pstmt = conn.prepareStatement(sql);
 		pstmt.setInt(1, num);		
 		rs = pstmt.executeQuery();
 		ResultSetMetaData rsm = rs.getMetaData();
+		}
 		%>
 		
 
@@ -139,6 +162,7 @@
 			<hr>
 	<%
 		if(rs.next()) {
+			
 	%>
 			<form action="" class="form-horizontal">
 
@@ -187,10 +211,9 @@
 %>
 				<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-10" id="selectOne_btns">
-						<input type="button" id="Listreturn_btn" value="List" /> <input
-							type="button" id="onedelete_btn" data-toggle="modal"
-							data-target="#myModal" value="Delete" /> <input type="button"
-							id="update_btn" value="Update" />
+						<input type="button" id="Listreturn_btn" value="List" />
+						<input type="button" id="onedelete_btn" data-toggle="modal" data-target="#myModal" value="Delete" />
+						<input type="button" id="update_btn" value="Update" />
 					</div>
 				</div>
 				<!-- Modal -->
