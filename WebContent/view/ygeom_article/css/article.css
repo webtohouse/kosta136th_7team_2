@@ -135,3 +135,21 @@ td.writer_title {
 td.readcount_title {
 	width: 100px;
 }
+
+/* modal style */
+div.modal-content {
+	width: 400px;
+}
+
+div.modal-footer {
+	text-align: center;
+}
+
+div.modal-body {
+	text-align: center;
+}
+
+label.textred {
+	font-weight: normal;
+	color: red;
+}

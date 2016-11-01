@@ -57,6 +57,7 @@
 
 				<span id="span-left">Total :1</span> <span id="span_right">page :1</span>
 				<hr>
+				
 				<table class="table table-hover">
 					<thead>
 						<tr>
@@ -119,7 +120,24 @@
 
 					</tbody>
 				</table>
+				<!-- 전체 선택 이벤트 핸들링 -->
 				<script>
+						$(document).ready(function() {
+							$('#all_check').click(function(){
+								var trs = $('tbody').children();
+								if (this.checked) {
+									for(var i = 0 ; i < trs.length ; i++) {
+										trs.eq(i).children().first().children().prop('checked', true);
+									}
+					            } else {
+									for(var i = 0 ; i < trs.length ; i++) {
+										trs.eq(i).children().first().children().prop('checked', false);
+									}
+					            }
+							});
+						});
+				</script>
+				<!-- <script>
 
 					$(document).ready(function(){
 
@@ -131,32 +149,34 @@
 
 					});
 
-				</script>
-				<label for="all_check">
-					<input type="checkbox" id="select_all" name="all_check"> 전체 선택
+				</script> -->
+				<hr>
+					<input type="checkbox" id="all_check" name="all_check"> 전체 선택
 					
-					<script>
+					<!-- <script>
+					$(document).ready(function(){
 						function checkAllCheckBox() {
-						   if($('#select_all').is(':checked')){
-						   		$(".check_").attr ( "checked" ,"checked" );
-						    } else {
-						        $(".check_").removeAttr('checked');
-						    }
-						 }
-					</script>
+							   if($("#select_all").is(":checked")){
+							   		$(".check_").attr ( "checked" ,"checked" );
+							    } else {
+							        $(".check_").removeAttr("checked");
+							    }
+							 }
+					});
+					</script> -->
 					<hr>
 					<div class="container text-center">
 
 						<button type="button" id="delete_btn" class="btn btn-default" data-toggle="modal" data-target="#myModal">삭제</button>
 
-						<ul class="pagination pagination-lg pager">
-							<li><a href="#">Previous</a></li>
+						<ul class="pagination pagination-default">
+							<li><a href="#">이전</a></li>
 							<li><a href="#">1</a></li>
 							<li><a href="#">2</a></li>
 							<li><a href="#">3</a></li>
 							<li><a href="#">4</a></li>
 							<li><a href="#">5</a></li>
-							<li><a href="#">Next</a></li>
+							<li><a href="#">다음</a></li>
 						</ul>
 						<button type="button" id="write_btn" class="btn btn-default">글쓰기</button>
 
@@ -174,6 +194,7 @@
 
 					</div>
 					<div class="container text-center">
+					<span>게시글 검색</span>
 						<input type="text" /> <input type="button" id="search_btn" value="검색" />
 					</div> <!-- Modal -->
 					<div class="modal fade" id="myModal" role="dialog">
@@ -184,25 +205,24 @@
 								<div class="modal-header">
 									<button type="button" class="close" data-dismiss="modal">×</button>
 									<h4>
-										<span class="glyphicon glyphicon-lock"></span> Delete
+										<span class="glyphicon glyphicon-exclamation-sign"></span> 선택글 삭제 
 									</h4>
 								</div>
 								<div class="modal-body">
 									<form role="form">
 										<div class="form-group">
-											<label for="deletequestion"><span
-												class="glyphicon glyphicon-user"></span>삭제 하시겠습니까?</label> <input
-												type="button" class="form-control" id="delete_success_btn"
-												value="네"> <input type="button" class="form-control"
-												id="delete_false_btn" value="아니요">
+											<label for="deletequestion" class="textred">
+												선택한 게시글을 삭제 하시겠습니까?
+											</label> 
 										</div>
 									</form>
 								</div>
 								<div class="modal-footer">
-									<button type="submit"
-										class="btn btn-danger btn-default pull-left"
-										data-dismiss="modal">
-										<span class="glyphicon glyphicon-remove"></span> Cancel
+									<button type="submit" class="btn btn-default" data-dismiss="modal">
+										<span class="glyphicon glyphicon-ok"></span>확인
+									</button>
+									<button type="submit" class="btn btn-default" data-dismiss="modal">
+										<span class="glyphicon glyphicon-remove"></span>취소
 									</button>
 								</div>
 							</div>
