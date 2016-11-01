@@ -38,7 +38,7 @@
 	$(document).ready(function() {
 
 		$('.title_td').click(function() {
-
+			
 			document.location = "articleRead.jsp";
 			
 		});

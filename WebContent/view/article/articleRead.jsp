@@ -19,13 +19,28 @@
 <script src="http://code.jquery.com/jquery-2.2.3.min.js"></script>
 <script	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 <script	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
+<script>	
 
+$(document).ready(function(){
+	
+	$('body').keyup(function(){
+        
+		if(event.keyCode == 116){
+ 
+        	document.location = "articleList.jsp";
+        	
+        }
+		
+    });	
+	
+});
 
+</script>
 
 <!-- ListReturn btn 핸들링 -->
 <script>
 	$(document).ready(function() {
-
+		
 		$('#Listreturn_btn').click(function() {
 
 			document.location = "articleList.jsp";
@@ -196,10 +211,9 @@
 %>
 				<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-10" id="selectOne_btns">
-						<input type="button" id="Listreturn_btn" value="List" /> <input
-							type="button" id="onedelete_btn" data-toggle="modal"
-							data-target="#myModal" value="Delete" /> <input type="button"
-							id="update_btn" value="Update" />
+						<input type="button" id="Listreturn_btn" value="List" />
+						<input type="button" id="onedelete_btn" data-toggle="modal" data-target="#myModal" value="Delete" />
+						<input type="button" id="update_btn" value="Update" />
 					</div>
 				</div>
 				<!-- Modal -->
