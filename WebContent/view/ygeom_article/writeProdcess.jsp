@@ -6,11 +6,10 @@
 
 <%
 	request.setCharacterEncoding("UTF-8");
-	int num = Integer.parseInt(request.getParameter("num"));
+
 	String title = request.getParameter("title");
 	String content = request.getParameter("content");
 	String writer = request.getParameter("writer");
-
 
 	Class.forName("com.mysql.jdbc.Driver");
 	Connection conn = null;
@@ -22,16 +21,17 @@
 	
 	try {
 		conn = DriverManager.getConnection(url, user, password);
-		String sql = "update articles set title = ?, content = ?, writer = ? where num = ?";
+		String sql = "insert into articles(title, content, writer) values(?, ?, ?)";
 		pstmt = conn.prepareStatement(sql);
 		pstmt.setString(1, title);
 		pstmt.setString(2, content);
 		pstmt.setString(3, writer);
-		pstmt.setInt(4, num);
-		pstmt.execute();
+		pstmt.executeUpdate();
 		
 		response.sendRedirect("articleList.jsp");
+		
 	} catch(Exception e) {
 		e.printStackTrace();
 	}
+	
 %>
