@@ -43,8 +43,7 @@
 			pstmt.setString(2, content);
 			pstmt.setString(3, writer);
 			pstmt.execute();
-	  				
-			response.sendRedirect("articleList.jsp");
+			response.sendRedirect("boardList.jsp");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

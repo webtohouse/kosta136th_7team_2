@@ -95,7 +95,7 @@
                   <li class="active"><a href="../index.html">Home</a></li>
                   <li><a href="../aboutUs/aboutUs.html">About Us</a></li>
                   <li><a href="../article/articleList.html">Article</a></li>
-                  <li><a href="boardList.html">board</a></li>
+                  <li><a href="boardList.jsp">board</a></li>
                   <li><a href="../qna/qnaList.html">QnA</a></li>
                   <li><a href="../login/signup.html">SignUp</a></li>
                </ul>
@@ -265,7 +265,7 @@
                <ul>
                   <li><a href="skills.html">Board</a></li>
                   <li><a href="gallery.html">Article</a></li>
-                  <li><a href="board.html">Board</a></li>
+                  <li><a href="boardList.jsp">Board</a></li>
                   <li><a href="shop.html">Q&amp;A</a></li>
                   <li><a href="join.html">Join</a></li>
                   <li><a href="login.html">Login</a></li>
