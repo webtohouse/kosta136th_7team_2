@@ -124,15 +124,19 @@
 	try {
 		conn = DriverManager.getConnection(url, user, password);
 		
-// 		String sql1 = "update articles set readCount = readCount + 1 where num =?";
+ 		String sql1 = "update articles set readCount = readCount + 1 where num =?";
+		pstmt = conn.prepareStatement(sql1);
+		pstmt.setInt(1, num);
+		int result = pstmt.executeUpdate();
 		
+		if(result != 0){
 		
 		String sql = "select num 번호, title 제목, content 내용, writer 작성자, readCount 조회수 from articles where num = ?";
 		pstmt = conn.prepareStatement(sql);
 		pstmt.setInt(1, num);		
 		rs = pstmt.executeQuery();
 		ResultSetMetaData rsm = rs.getMetaData();
-		
+		}
 		%>
 		
 
